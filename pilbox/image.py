@@ -268,6 +268,30 @@ class Image(object):
             return  # No need to fill
         x = max(int((size[0] - self.img.size[0]) / 2.0), 0)
         y = max(int((size[1] - self.img.size[1]) / 2.0), 0)
+        
+        
+        if x > 0 and y > 0:
+            w_size = int(size[0] - self.img.size[0])
+            h_size = int(size[1] - self.img.size[1])
+            if w_size < h_size:
+                w_new = size[0]
+                new_size = self._get_size(width =w_new,height = None)
+                self._scale(new_size,opts)
+                x = max(int((size[0] - self.img.size[0]) / 2.0), 0)
+                y = max(int((size[1] - self.img.size[1]) / 2.0), 0)
+            elif w_size > h_size:
+                h_new = size[1]
+                new_size = self._get_size(width = None,height = h_new)
+                self._scale(new_size,opts)
+                x = max(int((size[0] - self.img.size[0]) / 2.0), 0)
+                y = max(int((size[1] - self.img.size[1]) / 2.0), 0)
+            elif w_size == h_size:
+                w_new =size[0]
+                h_new =size[1]
+                new_size = self._get_size(width = w_new, height =h_new)
+                self._scale(new_size,opts)
+                return
+        
         color = color_hex_to_dec_tuple(opts["background"])
         mode = "RGBA" if len(color) == 4 else "RGB"
         img = PIL.Image.new(mode=mode, size=size, color=color)
